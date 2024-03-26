@@ -24,6 +24,7 @@ cur.execute(
 def show_all():
     cur.execute("SELECT * FROM users")
     users = cur.fetchall()
+    return users
 
 
 def add_subsriber(**args):
