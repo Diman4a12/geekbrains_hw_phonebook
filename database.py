@@ -10,12 +10,28 @@ cur.execute(
              CREATE TABLE IF NOT EXISTS users
              (
              id INTEGER PRIMARY KEY AUTOINCREMENT,
-             name TEXT,
+             name TEXT NOT NULL,
              surname TEXT,
-             phone 1 TEXT,
-             phone 2 TEXT,
-             date birth TEXT,
+             phone_1 TEXT NOT NULL,
+             phone_2 TEXT,
+             date_birth TEXT,
              email TEXT
              );
              """
 )
+
+
+def show_all():
+    cur.execute("SELECT * FROM users")
+    users = cur.fetchall()
+
+
+def add_subsriber(**args):
+    cur.execute(
+        "INSERT INTO users (name, surname, phone_1, phone_2, date_birth, email) VALUES (?, ?, ?)",
+        args,
+    )
+
+
+conn.commit()
+conn.close()
