@@ -7,6 +7,8 @@ root.title("Телефонный справочник")
 root.geometry("800x400")
 
 
+    
+    
 def create_entry():
     add_phone = Tk()
     add_phone.title("Добавить абонента")
@@ -31,11 +33,8 @@ def create_entry():
     ttk.Label(frame, text="E-mail").pack(anchor=NW)
     email = ttk.Entry(frame)
     email.pack(anchor=NW)
-    list_add = (name.get(), surname.get(), phone_1.get(), phone_2.get(), date_birth.get(), email.get())
-    ttk.Button(frame, text="Добавить", command=add_subsriber(list_add)).pack(anchor=NW)
+    ttk.Button(frame, text="Добавить", command=lambda: add_subsriber((name.get(), surname.get(), phone_1.get(), phone_2.get(), date_birth.get(), email.get()))).pack(anchor=NW)
     ttk.Button(frame, text="Закрыть", command=add_phone.destroy).pack(anchor=NW)
-    #return frame
-
 
 def change_entry():
     change_phone = Tk()
@@ -60,22 +59,26 @@ def del_entry():
 
 frm = ttk.Frame(root, padding=10)
 frm.grid()
-columns = ("name", "surname", "phone 1", "phone 2", "date birth", "email")
+columns = ("id", "name", "surname", "phone 1", "phone 2", "date birth", "email")
 tree = ttk.Treeview(frm, columns=columns, show="headings")
 tree.grid(columnspan=5, row=0)
 root.grid_columnconfigure(0, weight=1)
+tree.heading("id", text="№")
 tree.heading("name", text="Имя")
 tree.heading("surname", text="Фамилия")
 tree.heading("phone 1", text="Телефон 1")
 tree.heading("phone 2", text="Телефон 2")
 tree.heading("date birth", text="Дата рождения")
 tree.heading("email", text="E-mail")
-tree.column("#1", stretch=NO, width=130)
-tree.column("#2", stretch=NO, width=130)
-tree.column("#3", stretch=NO, width=130)
-tree.column("#4", stretch=NO, width=130)
-tree.column("#5", stretch=NO, width=130)
-tree.column("#6", stretch=NO, width=130)
+tree.column("#1", stretch=NO, width=20)
+tree.column("#2", stretch=NO, width=110)
+tree.column("#3", stretch=NO, width=110)
+tree.column("#4", stretch=NO, width=110)
+tree.column("#5", stretch=NO, width=110)
+tree.column("#6", stretch=NO, width=110)
+tree.column("#6", stretch=NO, width=110)
+for pers in show_all():
+    tree.insert("", END, values=pers)
 ttk.Button(frm, text="Добавить", command=create_entry).grid(column=0, row=10)
 ttk.Button(frm, text="Выбрать").grid(column=1, row=10)
 ttk.Button(frm, text="Изменить", command=change_entry).grid(column=2, row=10)

@@ -7,7 +7,7 @@ cur = conn.cursor()
 
 cur.execute(
     """
-             CREATE TABLE IF NOT EXISTS users
+             CREATE TABLE IF NOT EXISTS phonebook
              (
              id INTEGER PRIMARY KEY AUTOINCREMENT,
              name TEXT NOT NULL,
@@ -22,8 +22,12 @@ cur.execute(
 
 
 def show_all():
-    cur.execute("SELECT * FROM users")
+    conn = sq.connect("phonebook.db")
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM phonebook")
     users = cur.fetchall()
+    conn.commit()
+    conn.close()
     return users
 
 
@@ -31,7 +35,7 @@ def add_subsriber(args):
     conn = sq.connect("phonebook.db")
     cur = conn.cursor()
     cur.execute(
-        "INSERT INTO users VALUES (NULL, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO phonebook VALUES (NULL, ?, ?, ?, ?, ?, ?)",
         args,
     )
     conn.commit()
