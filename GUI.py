@@ -5,8 +5,6 @@ from database import *
 root = Tk()
 root.title("Телефонный справочник")
 root.geometry("800x400")
-
-
     
     
 def create_entry():
@@ -35,6 +33,8 @@ def create_entry():
     email.pack(anchor=NW)
     ttk.Button(frame, text="Добавить", command=lambda: add_subsriber((name.get(), surname.get(), phone_1.get(), phone_2.get(), date_birth.get(), email.get()))).pack(anchor=NW)
     ttk.Button(frame, text="Закрыть", command=add_phone.destroy).pack(anchor=NW)
+    
+
 
 def change_entry():
     change_phone = Tk()
@@ -56,6 +56,20 @@ def del_entry():
     ttk.Button(frame, text="Удалить").pack(anchor=CENTER)
     return frame
 
+def choose_row():
+    choose = Tk()
+    choose.title("Показать запись")
+    choose.geometry("210x250")
+    id = select_item()
+    ttk.Label(choose, text=f"Имя: {id[1]}").pack(anchor=NW)
+    ttk.Label(choose, text=f"Фамилия: {id[2]}").pack(anchor=NW)
+    ttk.Label(choose, text=f"Телефон 1: {id[3]}").pack(anchor=NW)
+    ttk.Label(choose, text=f"Телефон 2: {id[4]}").pack(anchor=NW)
+    ttk.Label(choose, text=f"Дата рождения: {id[5]}").pack(anchor=NW)
+    ttk.Label(choose, text=f"E-mail: {id[6]}").pack(anchor=NW)
+    ttk.Button(choose, text="Выход", command=choose.destroy).pack(anchor=NW)
+    
+    
 
 frm = ttk.Frame(root, padding=10)
 frm.grid()
@@ -80,7 +94,20 @@ tree.column("#6", stretch=NO, width=110)
 for pers in show_all():
     tree.insert("", END, values=pers)
 ttk.Button(frm, text="Добавить", command=create_entry).grid(column=0, row=10)
-ttk.Button(frm, text="Выбрать").grid(column=1, row=10)
+ttk.Button(frm, text="Выбрать", command=choose_row).grid(column=1, row=10)
 ttk.Button(frm, text="Изменить", command=change_entry).grid(column=2, row=10)
 ttk.Button(frm, text="Удалить", command=del_entry).grid(column=3, row=10)
 ttk.Button(frm, text="Выход", command=root.destroy).grid(column=4, row=10)
+
+#click_row = tree.item(tree.focus(), 'values')
+
+selected = tree.focus()
+temp = tree.item(selected, 'values')
+print(temp)
+
+
+
+def select_item():
+    selected = tree.focus()
+    temp = tree.item(selected, 'values')
+    return temp
