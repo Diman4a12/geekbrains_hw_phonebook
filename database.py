@@ -27,11 +27,15 @@ def show_all():
     return users
 
 
-def add_subsriber(**args):
+def add_subsriber(args):
+    conn = sq.connect("phonebook.db")
+    cur = conn.cursor()
     cur.execute(
-        "INSERT INTO users (name, surname, phone_1, phone_2, date_birth, email) VALUES (?, ?, ?)",
+        "INSERT INTO users VALUES (NULL, ?, ?, ?, ?, ?, ?)",
         args,
     )
+    conn.commit()
+    conn.close()
 
 
 conn.commit()

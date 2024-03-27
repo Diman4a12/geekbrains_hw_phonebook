@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from database import *
 
 root = Tk()
 root.title("Телефонный справочник")
@@ -13,19 +14,27 @@ def create_entry():
     frame = ttk.Frame(add_phone, padding=[8, 10])
     frame.grid()
     ttk.Label(frame, text="Введите имя").pack(anchor=NW)
-    entry = ttk.Entry(frame).pack(anchor=NW)
+    name = ttk.Entry(frame)
+    name.pack(anchor=NW)
     ttk.Label(frame, text="Введите фамилию").pack(anchor=NW)
-    entry = ttk.Entry(frame).pack(anchor=NW)
+    surname = ttk.Entry(frame)
+    surname.pack(anchor=NW)
     ttk.Label(frame, text="Введите номер телефона 1").pack(anchor=NW)
-    entry = ttk.Entry(frame).pack(anchor=NW)
+    phone_1 = ttk.Entry(frame)
+    phone_1.pack(anchor=NW)
     ttk.Label(frame, text="Введите номер телефона 2").pack(anchor=NW)
-    entry = ttk.Entry(frame).pack(anchor=NW)
+    phone_2 = ttk.Entry(frame)
+    phone_2.pack(anchor=NW)
     ttk.Label(frame, text="Дату рождения").pack(anchor=NW)
-    entry = ttk.Entry(frame).pack(anchor=NW)
+    date_birth = ttk.Entry(frame)
+    date_birth.pack(anchor=NW)
     ttk.Label(frame, text="E-mail").pack(anchor=NW)
-    entry = ttk.Entry(frame).pack(anchor=NW)
-    ttk.Button(frame, text="Добавить").pack(anchor=NW)
-    return frame
+    email = ttk.Entry(frame)
+    email.pack(anchor=NW)
+    list_add = (name.get(), surname.get(), phone_1.get(), phone_2.get(), date_birth.get(), email.get())
+    ttk.Button(frame, text="Добавить", command=add_subsriber(list_add)).pack(anchor=NW)
+    ttk.Button(frame, text="Закрыть", command=add_phone.destroy).pack(anchor=NW)
+    #return frame
 
 
 def change_entry():
