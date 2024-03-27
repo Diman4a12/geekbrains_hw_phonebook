@@ -42,5 +42,15 @@ def add_subsriber(args):
     conn.close()
 
 
+def add_subsriber(id):
+    conn = sq.connect("phonebook.db")
+    cur = conn.cursor()
+    cur.execute(
+        "DELETE FROM phonebook WHERE id = id"
+    )
+    conn.commit()
+    conn.close()
+
+
 conn.commit()
 conn.close()

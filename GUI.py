@@ -49,12 +49,14 @@ def change_entry():
 def del_entry():
     del_phone = Tk()
     del_phone.title("Удалить запись")
-    del_phone.geometry("210x80")
+    del_phone.geometry("310x110")
     frame = ttk.Frame(del_phone, padding=[8, 10])
     frame.grid()
-    ttk.Label(frame, text="Вы действительно хотите удалить?").pack(anchor=CENTER)
+    id = select_item()    
+    ttk.Label(frame, text=f"Вы действительно хотите удалить контакнт {id[1]}?").pack(anchor=CENTER)
     ttk.Button(frame, text="Удалить").pack(anchor=CENTER)
-    return frame
+    ttk.Button(frame, text="Закрыть", command=del_phone.destroy).pack(anchor=CENTER)
+  
 
 def choose_row():
     choose = Tk()
@@ -98,14 +100,6 @@ ttk.Button(frm, text="Выбрать", command=choose_row).grid(column=1, row=10
 ttk.Button(frm, text="Изменить", command=change_entry).grid(column=2, row=10)
 ttk.Button(frm, text="Удалить", command=del_entry).grid(column=3, row=10)
 ttk.Button(frm, text="Выход", command=root.destroy).grid(column=4, row=10)
-
-#click_row = tree.item(tree.focus(), 'values')
-
-selected = tree.focus()
-temp = tree.item(selected, 'values')
-print(temp)
-
-
 
 def select_item():
     selected = tree.focus()
