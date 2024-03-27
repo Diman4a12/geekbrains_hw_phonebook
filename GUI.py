@@ -54,7 +54,7 @@ def del_entry():
     frame.grid()
     id = select_item()    
     ttk.Label(frame, text=f"Вы действительно хотите удалить контакнт {id[1]}?").pack(anchor=CENTER)
-    ttk.Button(frame, text="Удалить").pack(anchor=CENTER)
+    ttk.Button(frame, text="Удалить", command=del_subsriber(id[0])).pack(anchor=CENTER)
     ttk.Button(frame, text="Закрыть", command=del_phone.destroy).pack(anchor=CENTER)
   
 
@@ -71,13 +71,39 @@ def choose_row():
     ttk.Label(choose, text=f"E-mail: {id[6]}").pack(anchor=NW)
     ttk.Button(choose, text="Выход", command=choose.destroy).pack(anchor=NW)
     
+   
+def find_row():
+    find = Tk()
+    find.title("Найти абонента")
+    find.geometry("400x400")
+    frame = ttk.Frame(find, padding=[8, 10])
+    frame.grid()
+    ttk.Label(frame, text="Введите имя").pack(anchor=NW)
+    name = ttk.Entry(frame)
+    name.pack(anchor=NW)
+    ttk.Label(frame, text="Введите фамилию").pack(anchor=NW)
+    surname = ttk.Entry(frame)
+    surname.pack(anchor=NW)
+    ttk.Button(frame, text="Найти", command=lambda: find_subsriber(name.get(), surname.get())).pack(anchor=NW)
+    #ttk.Label(frame, text=f"Имя: {id[1]}").pack(anchor=NW)
+    #ttk.Label(frame, text=f"Фамилия: {id[2]}").pack(anchor=NW)
+    #ttk.Label(frame, text=f"Телефон 1: {id[3]}").pack(anchor=NW)
+    #ttk.Label(frame, text=f"Телефон 2: {id[4]}").pack(anchor=NW)
+    #ttk.Label(frame, text=f"Дата рождения: {id[5]}").pack(anchor=NW)
+    #ttk.Label(frame, text=f"E-mail: {id[6]}").pack(anchor=NW)
+    ttk.Button(frame, text="Выход", command=find.destroy).pack(anchor=NW)
+
+
+       
+       
+    
     
 
 frm = ttk.Frame(root, padding=10)
 frm.grid()
 columns = ("id", "name", "surname", "phone 1", "phone 2", "date birth", "email")
 tree = ttk.Treeview(frm, columns=columns, show="headings")
-tree.grid(columnspan=5, row=0)
+tree.grid(columnspan=6, row=0)
 root.grid_columnconfigure(0, weight=1)
 tree.heading("id", text="№")
 tree.heading("name", text="Имя")
@@ -97,9 +123,10 @@ for pers in show_all():
     tree.insert("", END, values=pers)
 ttk.Button(frm, text="Добавить", command=create_entry).grid(column=0, row=10)
 ttk.Button(frm, text="Выбрать", command=choose_row).grid(column=1, row=10)
-ttk.Button(frm, text="Изменить", command=change_entry).grid(column=2, row=10)
-ttk.Button(frm, text="Удалить", command=del_entry).grid(column=3, row=10)
-ttk.Button(frm, text="Выход", command=root.destroy).grid(column=4, row=10)
+ttk.Button(frm, text="Найти", command=find_row).grid(column=2, row=10)
+ttk.Button(frm, text="Изменить", command=change_entry).grid(column=3, row=10)
+ttk.Button(frm, text="Удалить", command=del_entry).grid(column=4, row=10)
+ttk.Button(frm, text="Выход", command=root.destroy).grid(column=5, row=10)
 
 def select_item():
     selected = tree.focus()
