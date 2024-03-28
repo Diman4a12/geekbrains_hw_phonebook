@@ -1,11 +1,12 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import filedialog
 from database import *
+import json
 
 root = Tk()
 root.title("Телефонный справочник")
 root.geometry("810x400")
-
 
 
 def update_table():
@@ -14,7 +15,7 @@ def update_table():
         tree.delete(elemet)
     for pers in show_all():
         tree.insert("", END, values=pers)
-        
+
 
 def update_find_table(tree1, name, surname):
     items = tree1.get_children()
@@ -22,9 +23,9 @@ def update_find_table(tree1, name, surname):
         tree1.delete(elemet)
     item = find_subsriber(name, surname)
     for pers in item:
-        tree1.insert("", END, values=pers)        
-         
-    
+        tree1.insert("", END, values=pers)
+
+
 def create_entry():
     add_phone = Tk()
     add_phone.title("Добавить абонента")
@@ -49,15 +50,30 @@ def create_entry():
     ttk.Label(frame, text="E-mail").pack(anchor=NW)
     email = ttk.Entry(frame)
     email.pack(anchor=NW)
-    ttk.Button(frame, text="Добавить", command=lambda: (add_subsriber((name.get(), surname.get(), phone_1.get(), phone_2.get(), date_birth.get(), email.get())), update_table())).pack(anchor=NW)
+    ttk.Button(
+        frame,
+        text="Добавить",
+        command=lambda: (
+            add_subsriber(
+                (
+                    name.get(),
+                    surname.get(),
+                    phone_1.get(),
+                    phone_2.get(),
+                    date_birth.get(),
+                    email.get(),
+                )
+            ),
+            update_table(),
+        ),
+    ).pack(anchor=NW)
     ttk.Button(frame, text="Закрыть", command=add_phone.destroy).pack(anchor=NW)
-    
 
 
 def change_entry():
     change_phone = Tk()
     change_phone.title("Изменить запись")
-    change_phone.geometry("400x400")  
+    change_phone.geometry("400x400")
     frame = ttk.Frame(change_phone, padding=[8, 10])
     frame.grid()
     id = select_item()
@@ -84,10 +100,26 @@ def change_entry():
     ttk.Label(frame, text="E-mail").pack(anchor=NW)
     email = ttk.Entry(frame)
     email.insert(0, id[6])
-    email.pack(anchor=NW)       
-    ttk.Button(frame, text="Сохранить", command=lambda: (update_subsriber((name.get(), surname.get(), phone_1.get(), phone_2.get(), date_birth.get(), email.get()), id[0]), update_table())).pack(anchor=NW)
+    email.pack(anchor=NW)
+    ttk.Button(
+        frame,
+        text="Сохранить",
+        command=lambda: (
+            update_subsriber(
+                (
+                    name.get(),
+                    surname.get(),
+                    phone_1.get(),
+                    phone_2.get(),
+                    date_birth.get(),
+                    email.get(),
+                ),
+                id[0],
+            ),
+            update_table(),
+        ),
+    ).pack(anchor=NW)
     ttk.Button(frame, text="Закрыть", command=change_phone.destroy).pack(anchor=NW)
-
 
 
 def del_entry():
@@ -96,11 +128,16 @@ def del_entry():
     del_phone.geometry("310x110")
     frame = ttk.Frame(del_phone, padding=[8, 10])
     frame.grid()
-    id = select_item()    
-    ttk.Label(frame, text=f"Вы действительно хотите удалить контакнт {id[1]}?").pack(anchor=CENTER)
-    ttk.Button(frame, text="Удалить", command=lambda: (del_subsriber(id[0]), update_table())).pack(anchor=CENTER)
-    ttk.Button(frame, text="Закрыть", command=del_phone.destroy).pack(anchor=CENTER)
-  
+    id = select_item()
+    ttk.Label(frame, text=f"Вы действительно хотите удалить контакнт {id[1]}?").pack(
+        anchor=CENTER
+    )
+    ttk.Button(
+        frame,
+        text="Удалить",
+        command=lambda: (del_subsriber(id[0]), update_table(), del_phone.destroy()),
+    ).pack(anchor=CENTER)
+
 
 def choose_row():
     choose = Tk()
@@ -114,8 +151,8 @@ def choose_row():
     ttk.Label(choose, text=f"Дата рождения: {id[5]}").pack(anchor=NW)
     ttk.Label(choose, text=f"E-mail: {id[6]}").pack(anchor=NW)
     ttk.Button(choose, text="Выход", command=choose.destroy).pack(anchor=NW)
-    
-   
+
+
 def find_row():
 
     find = Tk()
@@ -125,11 +162,15 @@ def find_row():
     frame.grid()
     ttk.Label(frame, text="Введите имя").grid(column=1, row=0)
     name = ttk.Entry(frame)
-    name.grid(column=2, row=0)    
+    name.grid(column=2, row=0)
     ttk.Label(frame, text="Введите фамилию").grid(column=3, row=0)
     surname = ttk.Entry(frame)
-    surname.grid(column=4, row=0)    
-    btn_faind = ttk.Button(frame, text="Найти", command=lambda: update_find_table(tree1, name.get(), surname.get()))    
+    surname.grid(column=4, row=0)
+    btn_faind = ttk.Button(
+        frame,
+        text="Найти",
+        command=lambda: update_find_table(tree1, name.get(), surname.get()),
+    )
     btn_faind.grid(column=5, row=0)
     columns = ("id", "name", "surname", "phone 1", "phone 2", "date birth", "email")
     tree1 = ttk.Treeview(frame, columns=columns, show="headings")
@@ -150,22 +191,36 @@ def find_row():
     tree1.column("#6", stretch=NO, width=110)
     tree1.column("#6", stretch=NO, width=110)
     sb1 = Scrollbar(frame, orient=VERTICAL)
-    sb1.grid(column=6, row=1, sticky='ns')
+    sb1.grid(column=6, row=1, sticky="ns")
     tree1.config(yscrollcommand=sb1.set)
     sb1.config(command=tree1.yview)
     ttk.Button(frame, text="Выход", command=find.destroy).grid(column=3, row=6)
 
 
-       
-    
-    
-    
+def import_contact():
+    file_read = filedialog.askopenfilename()
+    with open(file_read, "r") as file:
+        contacts_js = file.read()
+        contacts = json.loads(contacts_js)
+        for item in contacts:
+            add_subsriber(
+                (
+                    item["First Name"],
+                    item["Last Name"],
+                    item["Mobile Phone"],
+                    item["Home Phone"],
+                    item["Birthday"],
+                    item["E-mail Address"],
+                )
+            )
+            update_table()
+
 
 frm = ttk.Frame(root, padding=10)
 frm.grid()
 columns = ("id", "name", "surname", "phone 1", "phone 2", "date birth", "email")
 tree = ttk.Treeview(frm, columns=columns, show="headings")
-tree.grid(columnspan=6, row=1)
+tree.grid(columnspan=7, row=1)
 root.grid_columnconfigure(0, weight=1)
 tree.heading("id", text="№")
 tree.heading("name", text="Имя")
@@ -182,7 +237,7 @@ tree.column("#5", stretch=NO, width=110)
 tree.column("#6", stretch=NO, width=110)
 tree.column("#6", stretch=NO, width=110)
 sb = Scrollbar(frm, orient=VERTICAL)
-sb.grid(column=6, row=1, sticky='ns')
+sb.grid(column=7, row=1, sticky="ns")
 tree.config(yscrollcommand=sb.set)
 sb.config(command=tree.yview)
 update_table()
@@ -190,11 +245,12 @@ ttk.Button(frm, text="Добавить", command=create_entry).grid(column=0, ro
 ttk.Button(frm, text="Выбрать", command=choose_row).grid(column=1, row=12)
 ttk.Button(frm, text="Найти", command=find_row).grid(column=2, row=12)
 ttk.Button(frm, text="Изменить", command=change_entry).grid(column=3, row=12)
-ttk.Button(frm, text="Удалить", command=del_entry).grid(column=4, row=12)
-ttk.Button(frm, text="Выход", command=root.destroy).grid(column=5, row=12)
+ttk.Button(frm, text="Импортировать", command=import_contact).grid(column=4, row=12)
+ttk.Button(frm, text="Удалить", command=del_entry).grid(column=5, row=12)
+ttk.Button(frm, text="Выход", command=root.destroy).grid(column=6, row=12)
+
 
 def select_item():
     selected = tree.focus()
-    temp = tree.item(selected, 'values')
+    temp = tree.item(selected, "values")
     return temp
-
