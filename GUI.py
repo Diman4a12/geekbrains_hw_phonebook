@@ -16,11 +16,11 @@ def update_table():
         tree.insert("", END, values=pers)
         
 
-def update_find_table(tree1, name):
+def update_find_table(tree1, name, surname):
     items = tree1.get_children()
     for elemet in items:
         tree1.delete(elemet)
-    item = find_subsriber(name)
+    item = find_subsriber(name, surname)
     for pers in item:
         tree1.insert("", END, values=pers)        
          
@@ -129,7 +129,7 @@ def find_row():
     ttk.Label(frame, text="Введите фамилию").grid(column=3, row=0)
     surname = ttk.Entry(frame)
     surname.grid(column=4, row=0)    
-    btn_faind = ttk.Button(frame, text="Найти", command=lambda: update_find_table(tree1, name.get()))#, surname.get()))    
+    btn_faind = ttk.Button(frame, text="Найти", command=lambda: update_find_table(tree1, name.get(), surname.get()))    
     btn_faind.grid(column=5, row=0)
     columns = ("id", "name", "surname", "phone 1", "phone 2", "date birth", "email")
     tree1 = ttk.Treeview(frame, columns=columns, show="headings")
