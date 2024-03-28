@@ -24,7 +24,7 @@ cur.execute(
 def show_all():
     conn = sq.connect("phonebook.db")
     cur = conn.cursor()
-    cur.execute("SELECT * FROM phonebook")
+    cur.execute("SELECT name, surname, phone_1, phone_2, date_birth, email FROM phonebook")
     users = cur.fetchall()
     conn.commit()
     conn.close()

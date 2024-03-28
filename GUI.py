@@ -4,8 +4,16 @@ from database import *
 
 root = Tk()
 root.title("Телефонный справочник")
-root.geometry("800x400")
-    
+root.geometry("810x400")
+
+
+
+def update_table():
+    i = 1
+    for pers in show_all():
+        tree.insert("", END, values=(i, *pers))
+        i+=1
+         
     
 def create_entry():
     add_phone = Tk()
@@ -121,7 +129,7 @@ def find_row():
 
 
        
-       
+    
     
     
 
@@ -145,8 +153,11 @@ tree.column("#4", stretch=NO, width=110)
 tree.column("#5", stretch=NO, width=110)
 tree.column("#6", stretch=NO, width=110)
 tree.column("#6", stretch=NO, width=110)
-for pers in show_all():
-    tree.insert("", END, values=pers)
+sb = Scrollbar(frm, orient=VERTICAL)
+sb.grid(column=6, row=0, sticky='ns')
+tree.config(yscrollcommand=sb.set)
+sb.config(command=tree.yview)
+root.after(100,update_table())
 ttk.Button(frm, text="Добавить", command=create_entry).grid(column=0, row=10)
 ttk.Button(frm, text="Выбрать", command=choose_row).grid(column=1, row=10)
 ttk.Button(frm, text="Найти", command=find_row).grid(column=2, row=10)
@@ -158,3 +169,4 @@ def select_item():
     selected = tree.focus()
     temp = tree.item(selected, 'values')
     return temp
+
