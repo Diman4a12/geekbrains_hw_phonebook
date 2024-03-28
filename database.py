@@ -69,16 +69,16 @@ def update_subsriber(args, id):
     conn.close()
     
     
-def find_subsriber(name, surname="NULL"):
+def find_subsriber(name, surname="*"):
     conn = sq.connect("phonebook.db")
     cur = conn.cursor()
-    cur.execute(
-        f"SELECT * FROM phonebook WHERE name = {name} AND surname = {surname}"
-    )
+    sql_query = "SELECT * FROM phonebook WHERE name = ?"
+    data = (name,)
+    cur.execute(sql_query, data)
     users = cur.fetchall()
     conn.commit()
     conn.close()
-    #return users
+    return users
 
 
 conn.commit()
