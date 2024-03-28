@@ -9,7 +9,7 @@ cur.execute(
     """
              CREATE TABLE IF NOT EXISTS phonebook
              (
-             id INTEGER PRIMARY KEY AUTOINCREMENT,
+             id INTEGER PRIMARY KEY,
              name TEXT NOT NULL,
              surname TEXT,
              phone_1 TEXT NOT NULL,
@@ -24,7 +24,7 @@ cur.execute(
 def show_all():
     conn = sq.connect("phonebook.db")
     cur = conn.cursor()
-    cur.execute("SELECT name, surname, phone_1, phone_2, date_birth, email FROM phonebook")
+    cur.execute("SELECT * FROM phonebook")
     users = cur.fetchall()
     conn.commit()
     conn.close()
@@ -54,8 +54,15 @@ def del_subsriber(id):
 
 def update_subsriber(args, id):  
     conn = sq.connect("phonebook.db")
-    cur = conn.cursor()
-    sql_query = """UPDATE phonebook SET name = ?, surname = ?, phone_1 = ?, phone_2 = ?, date_birth = ?, email = ? WHERE id = ? """
+    cur = conn.cursor() 
+    sql_query = """UPDATE phonebook SET
+                    name = ?,
+                    surname = ?,
+                    phone_1 = ?,
+                    phone_2 = ?,
+                    date_birth = ?,
+                    email = ?
+                    WHERE id = ? """
     data = (args[0], args[1], args[2], args[3], args[4], args[5], id)
     cur.execute(sql_query, data)
     conn.commit()

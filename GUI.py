@@ -9,10 +9,12 @@ root.geometry("810x400")
 
 
 def update_table():
-    i = 1
+    items = tree.get_children()
+    for elemet in items:
+        tree.delete(elemet)
     for pers in show_all():
-        tree.insert("", END, values=(i, *pers))
-        i+=1
+        tree.insert("", END, values=pers)
+        
          
     
 def create_entry():
@@ -39,7 +41,7 @@ def create_entry():
     ttk.Label(frame, text="E-mail").pack(anchor=NW)
     email = ttk.Entry(frame)
     email.pack(anchor=NW)
-    ttk.Button(frame, text="Добавить", command=lambda: add_subsriber((name.get(), surname.get(), phone_1.get(), phone_2.get(), date_birth.get(), email.get()))).pack(anchor=NW)
+    ttk.Button(frame, text="Добавить", command=lambda: (add_subsriber((name.get(), surname.get(), phone_1.get(), phone_2.get(), date_birth.get(), email.get())), update_table())).pack(anchor=NW)
     ttk.Button(frame, text="Закрыть", command=add_phone.destroy).pack(anchor=NW)
     
 
@@ -74,8 +76,8 @@ def change_entry():
     ttk.Label(frame, text="E-mail").pack(anchor=NW)
     email = ttk.Entry(frame)
     email.insert(0, id[6])
-    email.pack(anchor=NW)     
-    ttk.Button(frame, text="Сохранить", command=lambda: update_subsriber((name.get(), surname.get(), phone_1.get(), phone_2.get(), date_birth.get(), email.get()), id[0])).pack(anchor=NW)
+    email.pack(anchor=NW)       
+    ttk.Button(frame, text="Сохранить", command=lambda: (update_subsriber((name.get(), surname.get(), phone_1.get(), phone_2.get(), date_birth.get(), email.get()), id[0]), update_table())).pack(anchor=NW)
     ttk.Button(frame, text="Закрыть", command=change_phone.destroy).pack(anchor=NW)
 
 
@@ -88,7 +90,7 @@ def del_entry():
     frame.grid()
     id = select_item()    
     ttk.Label(frame, text=f"Вы действительно хотите удалить контакнт {id[1]}?").pack(anchor=CENTER)
-    ttk.Button(frame, text="Удалить", command=del_subsriber(id[0])).pack(anchor=CENTER)
+    ttk.Button(frame, text="Удалить", command=lambda: (del_subsriber(id[0]), update_table())).pack(anchor=CENTER)
     ttk.Button(frame, text="Закрыть", command=del_phone.destroy).pack(anchor=CENTER)
   
 
@@ -157,7 +159,7 @@ sb = Scrollbar(frm, orient=VERTICAL)
 sb.grid(column=6, row=0, sticky='ns')
 tree.config(yscrollcommand=sb.set)
 sb.config(command=tree.yview)
-root.after(100,update_table())
+update_table()
 ttk.Button(frm, text="Добавить", command=create_entry).grid(column=0, row=10)
 ttk.Button(frm, text="Выбрать", command=choose_row).grid(column=1, row=10)
 ttk.Button(frm, text="Найти", command=find_row).grid(column=2, row=10)
